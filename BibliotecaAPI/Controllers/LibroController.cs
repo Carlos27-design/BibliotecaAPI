@@ -2,6 +2,7 @@
 using BibliotecaAPI.Enitities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BibliotecaAPI.Controllers
 {
@@ -39,9 +40,10 @@ namespace BibliotecaAPI.Controllers
         public async Task<ActionResult> Post(Libro libro)
         {
             var existeAutor = await context.Autores.AnyAsync(x => x.Id == libro.AutorId);
-            if (existeAutor)
+            if (!existeAutor)
             {
-                return BadRequest($"El autor de id {libro.AutorId} no existe");
+                ModelState.AddModelError(nameof(libro.AutorId), $"El autor de id {libro.AutorId} no existe");
+                return ValidationProblem();
             }
             context.Add(libro);
             await context.SaveChangesAsync();
