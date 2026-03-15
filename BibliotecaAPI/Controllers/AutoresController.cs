@@ -18,13 +18,19 @@ namespace BibliotecaAPI.Controllers
 
         
 
-        [HttpGet]
+        [HttpGet("/listado-de-autores")]
         public async Task<IEnumerable<Autor>> Get()
         {
             return await context.Autores.ToListAsync();
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("primero")] //api/autores/promero
+        public async Task<Autor> GetPrimerAutor()
+        {
+            return await context.Autores.FirstAsync();
+        }
+
+        [HttpGet("{id:int}")] // cuando tiene un parametro {id:int} esto son parametros de ruta.
         public async Task<ActionResult<Autor>> Get(int id){
             var autor = await context.Autores
                 .Include(x => x.Libros)
@@ -36,6 +42,12 @@ namespace BibliotecaAPI.Controllers
             }
 
             return autor;
+        }
+
+        [HttpGet("{Nombre:alpha}")]
+        public async Task<IEnumerable<Autor>> GetAutorNombre(string nombre)
+        {
+            return await context.Autores.Where(x => x.Nombre.Contains(nombre)).ToListAsync();
         }
 
         [HttpPost]
