@@ -10,17 +10,27 @@ namespace BibliotecaAPI.Controllers
     public class AutoresController: ControllerBase
     {
         private readonly ApplicationDBContext context;
+        private readonly ILogger<AutoresController> logger;
 
-        public AutoresController(ApplicationDBContext context)
+        public AutoresController(ApplicationDBContext context, ILogger<AutoresController> logger)
         {
             this.context = context;
+            this.logger = logger;
         }
 
         
 
         [HttpGet("/listado-de-autores")]
+        [HttpGet]
         public async Task<IEnumerable<Autor>> Get()
         {
+            //Ejemplo
+            logger.LogTrace("Obteniendo el listado de Autores");
+            logger.LogDebug("Obteniendo el listado de Autores");
+            logger.LogInformation("Obteniendo el listado de Autores");
+            logger.LogWarning("Obteniendo el listado de Autores");
+            logger.LogError("Obteniendo el listado de Autores");
+            logger.LogCritical("obteniendo el listado de Autores");
             return await context.Autores.ToListAsync();
         }
 
